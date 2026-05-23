@@ -40,3 +40,10 @@ export interface IGetIssuesQuery {
   type?: IssueType;
   status?: IssueStatus;
 }
+
+export interface IUpdateIssuePayload {
+  title?: string;
+  description?: string;
+  type?: IssueType;
+  status?: IssueStatus;
+}

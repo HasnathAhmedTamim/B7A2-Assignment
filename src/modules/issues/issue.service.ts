@@ -7,12 +7,14 @@ import {
   type IGetIssuesQuery,
   type IReporter,
   type IIssueWithReporter,
+  type IUpdateIssuePayload,
 } from "./issue.interface";
 import {
   validateCreateIssuePayload,
   validateGetIssuesQuery,
+  validateUpdateIssuePayload,
 } from "./issue.validation";
-
+import { type AuthUser } from "../../types/auth";
 const createIssue = async (
   payload: ICreateIssuePayload,
   reporterId: number,
@@ -163,8 +165,88 @@ const getSingleIssue = async (id: number): Promise<IIssueWithReporter> => {
   };
 };
 
+const updateIssue = async (
+  id: number,
+  payload: IUpdateIssuePayload,
+  user: AuthUser,
+): Promise<IIssue> => {
+  validateUpdateIssuePayload(payload);
+
+  const issueResult = await pool.query<IIssue>(
+    `
+    SELECT id, title, description, type, status, reporter_id, created_at, updated_at
+    FROM issues
+    WHERE id = $1
+    `,
+    [id],
+  );
+
+  const issue = issueResult.rows[0];
+
+  if (!issue) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Issue not found");
+  }
+
+  const isMaintainer = user.role === "maintainer";
+  const isOwner = issue.reporter_id === user.id;
+
+  if (!isMaintainer) {
+    if (!isOwner) {
+      throw new AppError(
+        StatusCodes.FORBIDDEN,
+        "You can update only your own issue",
+      );
+    }
+
+    if (issue.status !== "open") {
+      throw new AppError(
+        StatusCodes.CONFLICT,
+        "Only open issues can be updated by contributor",
+      );
+    }
+
+    if (payload.status !== undefined) {
+      throw new AppError(
+        StatusCodes.FORBIDDEN,
+        "Contributor cannot update issue status",
+      );
+    }
+  }
+
+  const updatedTitle = payload.title ?? issue.title;
+  const updatedDescription = payload.description ?? issue.description;
+  const updatedType = payload.type ?? issue.type;
+  const updatedStatus = payload.status ?? issue.status;
+
+  const updatedResult = await pool.query<IIssue>(
+    `
+    UPDATE issues
+    SET title = $1,
+        description = $2,
+        type = $3,
+        status = $4,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = $5
+    RETURNING id, title, description, type, status, reporter_id, created_at, updated_at
+    `,
+    [updatedTitle, updatedDescription, updatedType, updatedStatus, id],
+  );
+
+  const updatedIssue = updatedResult.rows[0];
+
+  if (!updatedIssue) {
+    throw new AppError(
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      "Failed to update issue",
+    );
+  }
+
+  return updatedIssue;
+};
+
 export const IssueService = {
   createIssue,
   getAllIssues,
   getSingleIssue,
+  updateIssue
 };

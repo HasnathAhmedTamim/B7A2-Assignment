@@ -48,8 +48,30 @@ const getSingleIssue = catchAsync(async (req, res) => {
   });
 });
 
+const updateIssue = catchAsync(async (req, res) => {
+  if (!req.user) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized access");
+  }
+
+  const id = Number(req.params.id);
+
+  if (Number.isNaN(id)) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid issue id");
+  }
+
+  const issue = await IssueService.updateIssue(id, req.body, req.user);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Issue updated successfully",
+    data: issue,
+  });
+});
+
 export const IssueController = {
   createIssue,
   getAllIssues,
   getSingleIssue,
+  updateIssue
 };
