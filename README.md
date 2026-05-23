@@ -15,7 +15,7 @@ https://devpulse-api-backend.vercel.app/
 ## GitHub Repository
 
 ```txt
-your-github-repository-url-here
+https://github.com/HasnathAhmedTamim/B7A2-Assignment
 ```
 
 ---
