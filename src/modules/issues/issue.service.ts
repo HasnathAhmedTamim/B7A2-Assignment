@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import { pool } from "../../config/db";
-import { AppError } from "../../utils/AppError";
+import { pool } from "../../config/db.js";
+import { AppError } from "../../utils/AppError.js";
 import {
   type ICreateIssuePayload,
   type IIssue,
@@ -8,14 +8,14 @@ import {
   type IReporter,
   type IIssueWithReporter,
   type IUpdateIssuePayload,
-} from "./issue.interface";
+} from "./issue.interface.js";
 import {
   validateCreateIssuePayload,
   validateGetIssuesQuery,
   validateUpdateIssuePayload,
-} from "./issue.validation";
-import { type AuthUser } from "../../types/auth";
-import { MESSAGES } from "../../constants/messages";
+} from "./issue.validation.js";
+import { type AuthUser } from "../../types/auth.js";
+import { MESSAGES } from "../../constants/messages.js";
 
 
 

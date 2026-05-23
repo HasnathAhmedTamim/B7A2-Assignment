@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
-import { catchAsync } from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
-import { AuthService } from "./auth.service";
+import { catchAsync } from "../../utils/catchAsync.js";
+import { sendResponse } from "../../utils/sendResponse.js";
+import { AuthService } from "./auth.service.js";
 import { MESSAGES } from "../../constants/messages.js";
 // Controller function to handle user signup
 const signup = catchAsync(async (req, res) => {

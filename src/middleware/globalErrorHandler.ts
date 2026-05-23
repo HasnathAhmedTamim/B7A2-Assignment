@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from "express";
-import type { AppError } from "../utils/AppError";
+import type { AppError } from "../utils/AppError.js";
 import { MESSAGES } from "../constants/messages.js";
 
 

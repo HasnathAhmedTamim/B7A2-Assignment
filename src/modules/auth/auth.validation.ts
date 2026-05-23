@@ -1,5 +1,5 @@
 import { AppError } from "../../utils/AppError.js";
-import { type ISignupPayload, type ILoginPayload } from "./auth.interface";
+import { type ISignupPayload, type ILoginPayload } from "./auth.interface.js";
 import { MESSAGES } from "../../constants/messages.js";
 const isValidEmail = (email: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

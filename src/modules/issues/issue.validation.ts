@@ -1,11 +1,11 @@
-import { AppError } from "../../utils/AppError";
+import { AppError } from "../../utils/AppError.js";
 import {
   type ICreateIssuePayload,
   type IGetIssuesQuery,
   type IUpdateIssuePayload,
-} from "./issue.interface";
+} from "./issue.interface.js";
 
-import { MESSAGES } from "../../constants/messages";
+import { MESSAGES } from "../../constants/messages.js";
 export const validateCreateIssuePayload = (payload: ICreateIssuePayload) => {
   const { title, description, type } = payload;
 

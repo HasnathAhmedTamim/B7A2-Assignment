@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import { type Request, type Response, type NextFunction } from "express";
-import config from "../config/env";
-import { AppError } from "../utils/AppError";
-import { type AuthUser } from "../types/auth";
+import config from "../config/env.js";
+import { AppError } from "../utils/AppError.js";
+import { type AuthUser } from "../types/auth.js";
 import { MESSAGES } from "../constants/messages.js";
 export const auth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization;

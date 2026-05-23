@@ -1,10 +1,10 @@
 import { StatusCodes } from "http-status-codes";
-import { AppError } from "../../utils/AppError";
-import { catchAsync } from "../../utils/catchAsync";
-import { sendResponse } from "../../utils/sendResponse";
-import { IssueService } from "./issue.service";
-import { type IGetIssuesQuery } from "./issue.interface";
-import { MESSAGES } from "../../constants/messages";
+import { AppError } from "../../utils/AppError.js";
+import { catchAsync } from "../../utils/catchAsync.js";
+import { sendResponse } from "../../utils/sendResponse.js";
+import { IssueService } from "./issue.service.js";
+import { type IGetIssuesQuery } from "./issue.interface.js";
+import { MESSAGES } from "../../constants/messages.js";
 
 const createIssue = catchAsync(async (req, res) => {
   if (!req.user) {

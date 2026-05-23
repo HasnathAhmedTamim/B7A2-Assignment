@@ -1,17 +1,17 @@
 import bcrypt from "bcrypt";
 import { StatusCodes } from "http-status-codes";
-import { pool } from "../../config/db";
-import config from "../../config/env";
-import { AppError } from "../../utils/AppError";
+import { pool } from "../../config/db.js";
+import config from "../../config/env.js";
+import { AppError } from "../../utils/AppError.js";
 import {
   type ISignupPayload,
   type ILoginPayload,
   type IUserResponse,
   type IUserWithPassword,
-} from "./auth.interface";
-import { validateSignupPayload, validateLoginPayload } from "./auth.validation";
-import { createToken } from "./auth.utils";
-import { MESSAGES } from "../../constants/messages";
+} from "./auth.interface.js";
+import { validateSignupPayload, validateLoginPayload } from "./auth.validation.js";
+import { createToken } from "./auth.utils.js";
+import { MESSAGES } from "../../constants/messages.js";
 // Service function to handle user signup
 const signupUser = async (payload: ISignupPayload): Promise<IUserResponse> => {
   validateSignupPayload(payload);
