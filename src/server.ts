@@ -1,7 +1,7 @@
-import app from "./app.js";
-import config from "./config/env.js";
-import { pool } from "./config/db.js";
-import { initDB } from "./db/index.js";
+import app from "./app";
+import config from "./config/env";
+import { pool } from "./config/db";
+import { initDB } from "./db/index";
 
 const startServer = async () => {
   try {

@@ -1,4 +1,6 @@
-import { pool } from "../config/db.js";
+// import { pool } from "../config/db.js";
+
+import { pool } from "../config/db";
 
 export const initDB = async () => {
   try {
