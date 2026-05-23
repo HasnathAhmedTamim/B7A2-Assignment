@@ -124,7 +124,47 @@ const getAllIssues = async (
   return issuesWithReporter;
 };
 
+const getSingleIssue = async (id: number): Promise<IIssueWithReporter> => {
+  const issueResult = await pool.query<IIssue>(
+    `
+    SELECT id, title, description, type, status, reporter_id, created_at, updated_at
+    FROM issues
+    WHERE id = $1
+    `,
+    [id],
+  );
+
+  const issue = issueResult.rows[0];
+
+  if (!issue) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Issue not found");
+  }
+
+  const reporterResult = await pool.query<IReporter>(
+    `
+    SELECT id, name, role
+    FROM users
+    WHERE id = $1
+    `,
+    [issue.reporter_id],
+  );
+
+  const reporter = reporterResult.rows[0] || null;
+
+  return {
+    id: issue.id,
+    title: issue.title,
+    description: issue.description,
+    type: issue.type,
+    status: issue.status,
+    reporter,
+    created_at: issue.created_at,
+    updated_at: issue.updated_at,
+  };
+};
+
 export const IssueService = {
   createIssue,
   getAllIssues,
+  getSingleIssue,
 };

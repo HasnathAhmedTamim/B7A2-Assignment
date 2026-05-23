@@ -32,7 +32,24 @@ const getAllIssues = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleIssue = catchAsync(async (req, res) => {
+  const id = Number(req.params.id);
+
+  if (Number.isNaN(id)) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid issue id");
+  }
+
+  const issue = await IssueService.getSingleIssue(id);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    data: issue,
+  });
+});
+
 export const IssueController = {
   createIssue,
   getAllIssues,
+  getSingleIssue,
 };
