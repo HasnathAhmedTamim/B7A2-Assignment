@@ -3,6 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { AuthService } from "./auth.service";
 
+// Controller function to handle user signup
 const signup = catchAsync(async (req, res) => {
   const user = await AuthService.signupUser(req.body);
 

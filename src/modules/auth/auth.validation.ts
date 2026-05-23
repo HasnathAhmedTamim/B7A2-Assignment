@@ -1,10 +1,13 @@
 import { AppError } from "../../utils/AppError";
 import { type ISignupPayload } from "./auth.interface";
 
+
+// Helper function to validate email format
 const isValidEmail = (email: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
+// Validation function for signup payload
 export const validateSignupPayload = (payload: ISignupPayload) => {
   const { name, email, password, role } = payload;
 
