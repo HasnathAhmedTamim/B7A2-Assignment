@@ -1,6 +1,7 @@
 import { type Request, type Response, type NextFunction } from "express";
 import type { AppError } from "../utils/AppError";
-// import { AppError } from "../utils/AppError.js";
+import { MESSAGES } from "../constants/messages.js";
+
 
 export const globalErrorHandler = (
   err: AppError,
@@ -12,7 +13,7 @@ export const globalErrorHandler = (
 
   return res.status(statusCode).json({
     success: false,
-    message: err.message || "Something went wrong",
+    message: err.message || MESSAGES.COMMON.SOMETHING_WENT_WRONG,
     errors: err.errors || null,
   });
 };

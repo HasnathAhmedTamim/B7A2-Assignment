@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { AuthService } from "./auth.service";
-
+import { MESSAGES } from "../../constants/messages.js";
 // Controller function to handle user signup
 const signup = catchAsync(async (req, res) => {
   const user = await AuthService.signupUser(req.body);
@@ -11,7 +11,7 @@ const signup = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,
     success: true,
-    message: "User registered successfully",
+    message: MESSAGES.AUTH.USER_REGISTERED,
     data: user,
   });
 });
@@ -23,7 +23,7 @@ const login = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: "Login successful",
+    message: MESSAGES.AUTH.LOGIN_SUCCESS,
     data: result,
   });
 });

@@ -5,7 +5,9 @@ export const MESSAGES = {
     EMAIL_EXISTS: "Email already exists",
     INVALID_CREDENTIALS: "Invalid email or password",
     UNAUTHORIZED: "Unauthorized access",
-    INVALID_TOKEN: "Invalid or expired token",
+    INVALID_EXPIRED_TOKEN: "Invalid or expired token",
+    FAILED_CREATE: "Failed to create user",
+
   },
 
   ISSUE: {
@@ -20,13 +22,15 @@ export const MESSAGES = {
     UPDATE_OWN_ONLY: "You can update only your own issue",
     ONLY_OPEN_UPDATE: "Only open issues can be updated by contributor",
     CONTRIBUTOR_STATUS_FORBIDDEN: "Contributor cannot update issue status",
+    INVALID_ISSUE_ID: "Invalid issue id",
+    UPDATE_FORBIDDEN: "You can update only your own issue",
   },
 
   VALIDATION: {
     NAME_REQUIRED: "Name is required",
     VALID_EMAIL_REQUIRED: "Valid email is required",
     PASSWORD_REQUIRED: "Password is required",
-    PASSWORD_MIN: "Password must be at least 6 characters long",
+    PASSWORD_MIN_LENGTH: "Password must be at least 6 characters long",
     ROLE_INVALID: "Role must be contributor or maintainer",
     TITLE_REQUIRED: "Title is required",
     TITLE_MAX: "Title must not exceed 150 characters",
@@ -37,6 +41,11 @@ export const MESSAGES = {
     SORT_INVALID: "Sort must be newest or oldest",
     INVALID_ISSUE_ID: "Invalid issue id",
     UPDATE_FIELD_REQUIRED: "At least one field is required for update",
+    TITLE_STRING: "Title must be a string",
+    DESCRIPTION_STRING: "Description must be a string",
+    TITLE_MAX_LENGTH: "Title must not exceed 150 characters",
+    DESCRIPTION_MIN_LENGTH: "Description must be at least 20 characters long",
+    
   },
 
   COMMON: {

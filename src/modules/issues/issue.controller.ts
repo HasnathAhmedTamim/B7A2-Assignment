@@ -4,10 +4,11 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { IssueService } from "./issue.service";
 import { type IGetIssuesQuery } from "./issue.interface";
+import { MESSAGES } from "../../constants/messages";
 
 const createIssue = catchAsync(async (req, res) => {
   if (!req.user) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized access");
+    throw new AppError(StatusCodes.UNAUTHORIZED, MESSAGES.AUTH.UNAUTHORIZED);
   }
 
   const issue = await IssueService.createIssue(req.body, req.user.id);
@@ -15,7 +16,7 @@ const createIssue = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,
     success: true,
-    message: "Issue created successfully",
+    message: MESSAGES.ISSUE.CREATED,
     data: issue,
   });
 });
@@ -36,7 +37,7 @@ const getSingleIssue = catchAsync(async (req, res) => {
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid issue id");
+    throw new AppError(StatusCodes.BAD_REQUEST, MESSAGES.ISSUE.INVALID_ISSUE_ID);
   }
 
   const issue = await IssueService.getSingleIssue(id);
@@ -50,13 +51,13 @@ const getSingleIssue = catchAsync(async (req, res) => {
 
 const updateIssue = catchAsync(async (req, res) => {
   if (!req.user) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized access");
+    throw new AppError(StatusCodes.UNAUTHORIZED, MESSAGES.AUTH.UNAUTHORIZED);
   }
 
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid issue id");
+    throw new AppError(StatusCodes.BAD_REQUEST, MESSAGES.ISSUE.INVALID_ISSUE_ID);
   }
 
   const issue = await IssueService.updateIssue(id, req.body, req.user);
@@ -64,20 +65,20 @@ const updateIssue = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: "Issue updated successfully",
+    message: MESSAGES.ISSUE.UPDATED,
     data: issue,
   });
 });
 
 const deleteIssue = catchAsync(async (req, res) => {
   if (!req.user) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized access");
+    throw new AppError(StatusCodes.UNAUTHORIZED, MESSAGES.AUTH.UNAUTHORIZED);
   }
 
   const id = Number(req.params.id);
 
   if (Number.isNaN(id)) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid issue id");
+    throw new AppError(StatusCodes.BAD_REQUEST, MESSAGES.ISSUE.INVALID_ISSUE_ID);
   }
 
   await IssueService.deleteIssue(id, req.user);
@@ -85,7 +86,7 @@ const deleteIssue = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: "Issue deleted successfully",
+    message: MESSAGES.ISSUE.DELETED,
   });
 });
 

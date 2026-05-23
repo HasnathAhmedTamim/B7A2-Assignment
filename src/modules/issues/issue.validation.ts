@@ -5,27 +5,28 @@ import {
   type IUpdateIssuePayload,
 } from "./issue.interface";
 
+import { MESSAGES } from "../../constants/messages";
 export const validateCreateIssuePayload = (payload: ICreateIssuePayload) => {
   const { title, description, type } = payload;
 
   if (!title || typeof title !== "string") {
-    throw new AppError(400, "Title is required");
+    throw new AppError(400, MESSAGES.VALIDATION.TITLE_REQUIRED);
   }
 
   if (title.length > 150) {
-    throw new AppError(400, "Title must not exceed 150 characters");
+    throw new AppError(400, MESSAGES.VALIDATION.TITLE_MAX_LENGTH);
   }
 
   if (!description || typeof description !== "string") {
-    throw new AppError(400, "Description is required");
+    throw new AppError(400, MESSAGES.VALIDATION.DESCRIPTION_REQUIRED);
   }
 
   if (description.length < 20) {
-    throw new AppError(400, "Description must be at least 20 characters long");
+    throw new AppError(400, MESSAGES.VALIDATION.DESCRIPTION_MIN_LENGTH);
   }
 
   if (type !== "bug" && type !== "feature_request") {
-    throw new AppError(400, "Type must be bug or feature_request");
+    throw new AppError(400, MESSAGES.VALIDATION.TYPE_INVALID);
   }
 };
 
@@ -33,11 +34,11 @@ export const validateGetIssuesQuery = (query: IGetIssuesQuery) => {
   const { sort, type, status } = query;
 
   if (sort && sort !== "newest" && sort !== "oldest") {
-    throw new AppError(400, "Sort must be newest or oldest");
+    throw new AppError(400, MESSAGES.VALIDATION.SORT_INVALID);
   }
 
   if (type && type !== "bug" && type !== "feature_request") {
-    throw new AppError(400, "Type must be bug or feature_request");
+    throw new AppError(400, MESSAGES.VALIDATION.TYPE_INVALID);
   }
 
   if (
@@ -59,34 +60,34 @@ export const validateUpdateIssuePayload = (payload: IUpdateIssuePayload) => {
     type === undefined &&
     status === undefined
   ) {
-    throw new AppError(400, "At least one field is required for update");
+    throw new AppError(400, MESSAGES.VALIDATION.UPDATE_FIELD_REQUIRED);
   }
 
   if (title !== undefined) {
     if (typeof title !== "string") {
-      throw new AppError(400, "Title must be a string");
+      throw new AppError(400, MESSAGES.VALIDATION.TITLE_STRING);
     }
 
     if (title.length > 150) {
-      throw new AppError(400, "Title must not exceed 150 characters");
+      throw new AppError(400, MESSAGES.VALIDATION.TITLE_MAX_LENGTH);
     }
   }
 
   if (description !== undefined) {
     if (typeof description !== "string") {
-      throw new AppError(400, "Description must be a string");
+      throw new AppError(400, MESSAGES.VALIDATION.DESCRIPTION_STRING);
     }
 
     if (description.length < 20) {
       throw new AppError(
         400,
-        "Description must be at least 20 characters long",
+        MESSAGES.VALIDATION.DESCRIPTION_MIN_LENGTH,
       );
     }
   }
 
   if (type !== undefined && type !== "bug" && type !== "feature_request") {
-    throw new AppError(400, "Type must be bug or feature_request");
+    throw new AppError(400, MESSAGES.VALIDATION.TYPE_INVALID);
   }
 
   if (
@@ -95,6 +96,6 @@ export const validateUpdateIssuePayload = (payload: IUpdateIssuePayload) => {
     status !== "in_progress" &&
     status !== "resolved"
   ) {
-    throw new AppError(400, "Status must be open, in_progress, or resolved");
+    throw new AppError(400, MESSAGES.VALIDATION.STATUS_INVALID);
   }
 };

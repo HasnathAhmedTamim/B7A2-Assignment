@@ -15,6 +15,10 @@ import {
   validateUpdateIssuePayload,
 } from "./issue.validation";
 import { type AuthUser } from "../../types/auth";
+import { MESSAGES } from "../../constants/messages";
+
+
+
 const createIssue = async (
   payload: ICreateIssuePayload,
   reporterId: number,
@@ -29,7 +33,7 @@ const createIssue = async (
   );
 
   if (reporterResult.rows.length === 0) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Reporter not found");
+    throw new AppError(StatusCodes.NOT_FOUND, MESSAGES.ISSUE.REPORTER_NOT_FOUND);
   }
 
   const result = await pool.query<IIssue>(
@@ -46,7 +50,7 @@ const createIssue = async (
   if (!issue) {
     throw new AppError(
       StatusCodes.INTERNAL_SERVER_ERROR,
-      "Failed to create issue",
+      MESSAGES.ISSUE.FAILED_CREATE,
     );
   }
 
@@ -139,7 +143,7 @@ const getSingleIssue = async (id: number): Promise<IIssueWithReporter> => {
   const issue = issueResult.rows[0];
 
   if (!issue) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Issue not found");
+    throw new AppError(StatusCodes.NOT_FOUND, MESSAGES.ISSUE.NOT_FOUND);
   }
 
   const reporterResult = await pool.query<IReporter>(
@@ -184,7 +188,7 @@ const updateIssue = async (
   const issue = issueResult.rows[0];
 
   if (!issue) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Issue not found");
+    throw new AppError(StatusCodes.NOT_FOUND, MESSAGES.ISSUE.NOT_FOUND);
   }
 
   const isMaintainer = user.role === "maintainer";
@@ -194,21 +198,21 @@ const updateIssue = async (
     if (!isOwner) {
       throw new AppError(
         StatusCodes.FORBIDDEN,
-        "You can update only your own issue",
+        MESSAGES.ISSUE.UPDATE_FORBIDDEN,
       );
     }
 
     if (issue.status !== "open") {
       throw new AppError(
         StatusCodes.CONFLICT,
-        "Only open issues can be updated by contributor",
+        MESSAGES.ISSUE.ONLY_OPEN_UPDATE,
       );
     }
 
     if (payload.status !== undefined) {
       throw new AppError(
         StatusCodes.FORBIDDEN,
-        "Contributor cannot update issue status",
+        MESSAGES.ISSUE.CONTRIBUTOR_STATUS_FORBIDDEN,
       );
     }
   }
@@ -237,7 +241,7 @@ const updateIssue = async (
   if (!updatedIssue) {
     throw new AppError(
       StatusCodes.INTERNAL_SERVER_ERROR,
-      "Failed to update issue",
+      MESSAGES.ISSUE.FAILED_UPDATE,
     );
   }
 
@@ -248,7 +252,7 @@ const deleteIssue = async (id: number, user: AuthUser): Promise<void> => {
   if (user.role !== "maintainer") {
     throw new AppError(
       StatusCodes.FORBIDDEN,
-      "Only maintainer can delete issue",
+      MESSAGES.ISSUE.ONLY_MAINTAINER_DELETE,
     );
   }
 
@@ -264,7 +268,7 @@ const deleteIssue = async (id: number, user: AuthUser): Promise<void> => {
   const issue = issueResult.rows[0];
 
   if (!issue) {
-    throw new AppError(StatusCodes.NOT_FOUND, "Issue not found");
+    throw new AppError(StatusCodes.NOT_FOUND, MESSAGES.ISSUE.NOT_FOUND);
   }
 
   await pool.query(

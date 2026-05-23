@@ -11,7 +11,7 @@ import {
 } from "./auth.interface";
 import { validateSignupPayload, validateLoginPayload } from "./auth.validation";
 import { createToken } from "./auth.utils";
-
+import { MESSAGES } from "../../constants/messages";
 // Service function to handle user signup
 const signupUser = async (payload: ISignupPayload): Promise<IUserResponse> => {
   validateSignupPayload(payload);
@@ -25,7 +25,7 @@ const signupUser = async (payload: ISignupPayload): Promise<IUserResponse> => {
   );
 
   if (existingUser.rows.length > 0) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Email already exists");
+    throw new AppError(StatusCodes.BAD_REQUEST, MESSAGES.AUTH.EMAIL_EXISTS);
   }
 
   const hashedPassword = await bcrypt.hash(password, config.bcryptSaltRounds);
@@ -45,7 +45,7 @@ const signupUser = async (payload: ISignupPayload): Promise<IUserResponse> => {
   if (!createdUser) {
     throw new AppError(
       StatusCodes.INTERNAL_SERVER_ERROR,
-      "Failed to create user",
+      MESSAGES.AUTH.FAILED_CREATE,
     );
   }
 
@@ -70,13 +70,13 @@ const loginUser = async (payload: ILoginPayload) => {
   const user = result.rows[0];
 
   if (!user) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid email or password");
+    throw new AppError(StatusCodes.UNAUTHORIZED, MESSAGES.AUTH.INVALID_CREDENTIALS);
   }
 
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 
   if (!isPasswordMatched) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid email or password");
+    throw new AppError(StatusCodes.UNAUTHORIZED, MESSAGES.AUTH.INVALID_CREDENTIALS);
   }
 
   const token = createToken({
