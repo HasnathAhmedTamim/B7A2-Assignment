@@ -7,6 +7,11 @@ export interface ISignupPayload {
   role?: UserRole;
 }
 
+export interface ILoginPayload {
+  email: string;
+  password: string;
+}
+
 export interface IUserResponse {
   id: number;
   name: string;
@@ -14,4 +19,8 @@ export interface IUserResponse {
   role: UserRole;
   created_at: Date;
   updated_at: Date;
+}
+
+export interface IUserWithPassword extends IUserResponse {
+  password: string;
 }

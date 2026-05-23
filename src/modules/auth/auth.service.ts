@@ -3,8 +3,14 @@ import { StatusCodes } from "http-status-codes";
 import { pool } from "../../config/db";
 import config from "../../config/env";
 import { AppError } from "../../utils/AppError";
-import { type ISignupPayload, type IUserResponse } from "./auth.interface";
-import { validateSignupPayload } from "./auth.validation";
+import {
+  type ISignupPayload,
+  type ILoginPayload,
+  type IUserResponse,
+  type IUserWithPassword,
+} from "./auth.interface";
+import { validateSignupPayload, validateLoginPayload } from "./auth.validation";
+import { createToken } from "./auth.utils";
 
 // Service function to handle user signup
 const signupUser = async (payload: ISignupPayload): Promise<IUserResponse> => {
@@ -45,7 +51,56 @@ const signupUser = async (payload: ISignupPayload): Promise<IUserResponse> => {
 
   return createdUser;
 };
+// Service function to handle user login
+const loginUser = async (payload: ILoginPayload) => {
+  validateLoginPayload(payload);
+
+  const { email, password } = payload;
+
+//   Check if the user exists in the database
+  const result = await pool.query<IUserWithPassword>(
+    `
+    SELECT id, name, email, password, role, created_at, updated_at
+    FROM users
+    WHERE email = $1
+    `,
+    [email],
+  );
+
+  const user = result.rows[0];
+
+  if (!user) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid email or password");
+  }
+
+  const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordMatched) {
+    throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid email or password");
+  }
+
+  const token = createToken({
+    id: user.id,
+    name: user.name,
+    role: user.role,
+  });
+
+  const userWithoutPassword: IUserResponse = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    created_at: user.created_at,
+    updated_at: user.updated_at,
+  };
+
+  return {
+    token,
+    user: userWithoutPassword,
+  };
+};
 
 export const AuthService = {
   signupUser,
+  loginUser,
 };

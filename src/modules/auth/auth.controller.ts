@@ -16,6 +16,18 @@ const signup = catchAsync(async (req, res) => {
   });
 });
 
+// Controller function to handle user login
+const login = catchAsync(async (req, res) => {
+  const result = await AuthService.loginUser(req.body);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Login successful",
+    data: result,
+  });
+});
 export const AuthController = {
   signup,
+  login
 };

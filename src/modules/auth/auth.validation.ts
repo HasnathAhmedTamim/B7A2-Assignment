@@ -1,13 +1,10 @@
-import { AppError } from "../../utils/AppError";
-import { type ISignupPayload } from "./auth.interface";
+import { AppError } from "../../utils/AppError.js";
+import { type ISignupPayload, type ILoginPayload } from "./auth.interface";
 
-
-// Helper function to validate email format
 const isValidEmail = (email: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
-// Validation function for signup payload
 export const validateSignupPayload = (payload: ISignupPayload) => {
   const { name, email, password, role } = payload;
 
@@ -29,5 +26,17 @@ export const validateSignupPayload = (payload: ISignupPayload) => {
 
   if (role && role !== "contributor" && role !== "maintainer") {
     throw new AppError(400, "Role must be contributor or maintainer");
+  }
+};
+
+export const validateLoginPayload = (payload: ILoginPayload) => {
+  const { email, password } = payload;
+
+  if (!email || typeof email !== "string" || !isValidEmail(email)) {
+    throw new AppError(400, "Valid email is required");
+  }
+
+  if (!password || typeof password !== "string") {
+    throw new AppError(400, "Password is required");
   }
 };
