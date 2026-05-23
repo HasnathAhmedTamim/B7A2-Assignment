@@ -1,8 +1,9 @@
 import express, { type Request, type Response } from "express";
 import cors from "cors";
-import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
-import { notFound } from "./middleware/notFound.js";
-import { AuthRoutes } from "./modules/auth/auth.route.js";
+import { globalErrorHandler } from "./middleware/globalErrorHandler";
+import { notFound } from "./middleware/notFound";
+import { AuthRoutes } from "./modules/auth/auth.route";
+import { IssueRoutes } from "./modules/issues/issue.route";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get("/", (req: Request, res: Response) => {
 
 // routes
 app.use("/api/auth", AuthRoutes);
+app.use("/api/issues", IssueRoutes);
 
 // not found and global error handler
 app.use(notFound);
