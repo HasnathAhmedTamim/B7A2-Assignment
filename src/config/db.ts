@@ -1,8 +1,8 @@
 import { Pool } from "pg";
-import { envVars } from "./env.js";
+import config from "./env.js";
 
 export const pool = new Pool({
-  connectionString: envVars.databaseUrl,
+  connectionString: config.connectionString,
   ssl: {
     rejectUnauthorized: false,
   },
