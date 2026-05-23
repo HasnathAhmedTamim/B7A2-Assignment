@@ -6,6 +6,7 @@ import { AuthService } from "./auth.service";
 // Controller function to handle user signup
 const signup = catchAsync(async (req, res) => {
   const user = await AuthService.signupUser(req.body);
+  //   console.log("Created user:", user);
 
   sendResponse(res, {
     statusCode: StatusCodes.CREATED,

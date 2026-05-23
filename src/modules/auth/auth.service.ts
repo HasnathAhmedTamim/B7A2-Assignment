@@ -12,6 +12,7 @@ const signupUser = async (payload: ISignupPayload): Promise<IUserResponse> => {
 
   const { name, email, password, role = "contributor" } = payload;
 
+  //   Check if the email already exists in the database
   const existingUser = await pool.query(
     `SELECT id FROM users WHERE email = $1`,
     [email],
@@ -23,7 +24,7 @@ const signupUser = async (payload: ISignupPayload): Promise<IUserResponse> => {
 
   const hashedPassword = await bcrypt.hash(password, config.bcryptSaltRounds);
 
-//   Insert the new user into the database and return the created user
+  //   Insert the new user into the database and return the created user
   const result = await pool.query<IUserResponse>(
     `
     INSERT INTO users (name, email, password, role)
