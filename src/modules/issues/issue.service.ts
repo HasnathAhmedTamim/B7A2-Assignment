@@ -244,9 +244,42 @@ const updateIssue = async (
   return updatedIssue;
 };
 
+const deleteIssue = async (id: number, user: AuthUser): Promise<void> => {
+  if (user.role !== "maintainer") {
+    throw new AppError(
+      StatusCodes.FORBIDDEN,
+      "Only maintainer can delete issue",
+    );
+  }
+
+  const issueResult = await pool.query<IIssue>(
+    `
+    SELECT id, title, description, type, status, reporter_id, created_at, updated_at
+    FROM issues
+    WHERE id = $1
+    `,
+    [id],
+  );
+
+  const issue = issueResult.rows[0];
+
+  if (!issue) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Issue not found");
+  }
+
+  await pool.query(
+    `
+    DELETE FROM issues
+    WHERE id = $1
+    `,
+    [id],
+  );
+};
+
 export const IssueService = {
   createIssue,
   getAllIssues,
   getSingleIssue,
-  updateIssue
+  updateIssue,
+  deleteIssue,
 };

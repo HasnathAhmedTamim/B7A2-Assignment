@@ -9,7 +9,7 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    throw new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized access");
+    return next(new AppError(StatusCodes.UNAUTHORIZED, "Unauthorized access"));
   }
 
   try {
@@ -19,6 +19,8 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
 
     next();
   } catch {
-    throw new AppError(StatusCodes.UNAUTHORIZED, "Invalid or expired token");
+    return next(
+      new AppError(StatusCodes.UNAUTHORIZED, "Invalid or expired token"),
+    );
   }
 };
