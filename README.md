@@ -7,7 +7,7 @@ DevPulse API is a backend REST API for an internal tech issue and feature tracki
 ## Live URL
 
 ```txt
-your-live-url-here
+https://devpulse-api-backend.vercel.app/
 ````
 
 ---
